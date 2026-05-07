@@ -1,0 +1,106 @@
+describe('Saucedemo Login', () => {
+    it('should load the login page', () => {
+        cy.visit('/')
+        cy.get('[data-test="username"]').should('be.visible')
+        cy.get('[data-test="password"]').should('be.visible')
+        cy.get('[data-test="login-button"]').should('be.visible')
+    })
+  
+    it('saucedemo-login-test', () => {
+        cy.visit('/')
+        cy.get('[data-test="username"]').click();
+        cy.get('[data-test="username"]').type('standard_user');
+        cy.get('[data-test="password"]').click();
+        cy.get('[data-test="password"]').type('secret_sauce');
+        cy.get('[data-test="login-button"]').click();
+        cy.url().should('eq', Cypress.config().baseUrl + '/inventory.html')
+    })
+
+    it('saucedemo-empty-username', () => {
+        cy.visit('/')
+        cy.get('[data-test="password"]').click();
+        cy.get('[data-test="password"]').type('secret_sauce');
+        cy.get('[data-test="login-button"]').click();
+        cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Username is required')
+    })
+
+    it('saucedemo-empty-password', () => {
+        cy.visit('/')
+        cy.get('[data-test="username"]').click();
+        cy.get('[data-test="username"]').type('standard_user');
+        cy.get('[data-test="login-button"]').click();
+        cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Password is required')
+    })
+
+    it('saucedemo-invalid-username', () => {
+        cy.visit('/')
+        cy.get('[data-test="username"]').click();
+        cy.get('[data-test="username"]').type('invalid_user');
+        cy.get('[data-test="password"]').click();
+        cy.get('[data-test="password"]').type('secret_sauce');
+        cy.get('[data-test="login-button"]').click();
+        cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Username and password do not match any user in this service')
+    })
+
+    it('saucedemo-invalid-password', () => {
+        cy.visit('/')
+        cy.get('[data-test="username"]').click();
+        cy.get('[data-test="username"]').type('standard_user');
+        cy.get('[data-test="password"]').click();
+        cy.get('[data-test="password"]').type('invalid_password');
+        cy.get('[data-test="login-button"]').click();
+        cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Username and password do not match any user in this service')
+    })
+
+    it('saucedemo-locked-out-user', () => {
+        cy.visit('/')
+        cy.get('[data-test="username"]').click();
+        cy.get('[data-test="username"]').type('locked_out_user');
+        cy.get('[data-test="password"]').click();
+        cy.get('[data-test="password"]').type('secret_sauce');
+        cy.get('[data-test="login-button"]').click();
+        cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Sorry, this user has been locked out.')
+    })
+
+    it('saucedemo-performance-glitch-user', () => {
+        cy.visit('/')
+        cy.get('[data-test="username"]').click();
+        cy.get('[data-test="username"]').type('performance_glitch_user');
+        cy.get('[data-test="password"]').click();
+        cy.get('[data-test="password"]').type('secret_sauce');
+        cy.get('[data-test="login-button"]').click();
+        cy.url().should('eq', Cypress.config().baseUrl + '/inventory.html').then(() => {
+            const duration = Date.now()
+            cy.log(`Glitch user login: ${duration}ms`)
+            // Assert it completes but takes longer than standard
+            expect(duration).to.be.greaterThan(3000)
+            expect(duration).to.be.lessThan(100000) // performance-glitch-user take much longer still, so this will fail by default
+        })
+    })
+
+    it('should verify specific item details', () => {
+    const src1 = '/static/media/sauce-backpack-1200x1500.0a0b85a385945026062b.jpg';
+    cy.visit('/')
+    cy.get('[data-test="username"]').click();
+    cy.get('[data-test="username"]').type('visual_user');
+    cy.get('[data-test="password"]').click();
+    cy.get('[data-test="password"]').type('secret_sauce');
+    cy.get('[data-test="login-button"]').click();
+    cy.contains('.inventory_item', 'Sauce Labs Backpack')
+        .within(() => {
+            // Check name
+            cy.get('.inventory_item_name')
+                .should('have.text', 'Sauce Labs Backpack')
+            
+            // Check price (commeted out if needed to check if image is correct)
+            cy.get('.inventory_item_price')
+                .should('have.text', '$29.99')
+            
+            // Check image has correct src
+            cy.get('.inventory_item_img img').invoke('attr', 'src').then((nextSrc) => {
+                expect(nextSrc).to.equal(src1)
+            }) //test will fail because visual_user have different image.
+        })
+    });
+});
+
