@@ -78,7 +78,7 @@ describe('Saucedemo Login', () => {
         })
     })
 
-    it('should verify specific item details', () => {
+    it('saucedemo-verify-specific-item-details', () => {
     const src1 = '/static/media/sauce-backpack-1200x1500.0a0b85a385945026062b.jpg';
     cy.visit('/')
     cy.get('[data-test="username"]').click();
@@ -96,6 +96,34 @@ describe('Saucedemo Login', () => {
             cy.get('.inventory_item_price').then(($price) => {
                 const priceText = $price.text().trim();
                 expect(priceText).to.not.equal('$29.99')
+            })
+
+
+            // Check image has correct src
+            cy.get('.inventory_item_img img').invoke('attr', 'src').then((nextSrc) => {
+                expect(nextSrc).to.not.equal(src1)
+            }) //src1 is the correct image, compare to not equal to confirm the image is wrong
+        })
+    });
+
+    it('saucedemo-verify-specific-item-details (wrong case for screenshot)', () => {
+    const src1 = '/static/media/sauce-backpack-1200x1500.0a0b85a385945026062b.jpg';
+    cy.visit('/')
+    cy.get('[data-test="username"]').click();
+    cy.get('[data-test="username"]').type('visual_user');
+    cy.get('[data-test="password"]').click();
+    cy.get('[data-test="password"]').type('secret_sauce');
+    cy.get('[data-test="login-button"]').click();
+    cy.contains('.inventory_item', 'Sauce Labs Backpack')
+        .within(() => {
+            // Check name
+            cy.get('.inventory_item_name')
+                .should('have.text', 'Sauce Labs Backpack')
+            
+            // Check price, $29.99 is the correct price, so we check not equal to confirm price is wrong
+            cy.get('.inventory_item_price').then(($price) => {
+                const priceText = $price.text().trim();
+                expect(priceText).to.equal('$29.99')
             })
 
 
