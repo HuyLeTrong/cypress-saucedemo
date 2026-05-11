@@ -15,7 +15,7 @@ This is a sample project for automation testing the SauceDemo website using Cypr
 - Performance glitch user timing assertion
 - Visual defect detection via visual_user
 
-### E2E Order Flow (e2e_flow.cy.js)
+### E2E Order Flow (e2epurschase.cy.js)
 - Complete purchase journey from login to logout
 - Cart item verification
 - Checkout form submission
