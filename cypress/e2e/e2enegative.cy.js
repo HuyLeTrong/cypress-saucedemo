@@ -1,6 +1,6 @@
-describe('Saucedemo E2E flow', () => {
+describe('Saucedemo E2E negative flow', () => {
   
-    it('saucedemo-place-order', () => {
+    it('saucedemo-negative-flow', () => {
 
         cy.visit('/')
         //login
