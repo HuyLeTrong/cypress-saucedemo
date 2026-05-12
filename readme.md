@@ -21,3 +21,8 @@ This is a sample project for automation testing the SauceDemo website using Cypr
 - Checkout form submission
 - Order confirmation
 - Session logout verification
+
+### E2E Negative Flow (e2enegative.cy.js)
+- Checkout form negative case testing
+- Session logout verification
+- Check auto redirect to login page when trying to access page that can only be viewed after logging in.
