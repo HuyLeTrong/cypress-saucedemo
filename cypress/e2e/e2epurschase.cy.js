@@ -1,10 +1,8 @@
 describe('Saucedemo E2E flow', () => {
-    beforeEach(() => {
-        cy.visit('/')
-    })
-
   
     it('saucedemo-place-order', () => {
+
+        cy.visit('/')
         //login
         cy.get('[data-test="username"]').type('standard_user')
         cy.get('[data-test="password"]').type('secret_sauce')
