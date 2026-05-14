@@ -2,7 +2,21 @@
 
 ### SauceDemo Cypress testing
 
-This is a sample project for automation testing the SauceDemo website using Cypress
+This is a sample project for automated E2E testing of the SauceDemo website using Cypress
+For this test project cypress.env.json is intentionally committed for demo purposes only. In a production project this file should be listed in .gitignore.
+
+## Getting Started
+
+### Prerequisites
+- Node.js v18+
+- npm
+
+### Installation
+npm install
+
+### Running Tests
+npm run cypress:run       # headless
+npm run cypress:open      # interactive UI
 
 ## Test Scenarios Covered
 
@@ -15,9 +29,14 @@ This is a sample project for automation testing the SauceDemo website using Cypr
 - Performance glitch user timing assertion
 - Visual defect detection via visual_user
 
-### E2E Order Flow (e2epurschase.cy.js)
+### E2E Order Flow (e2epurchase.cy.js)
 - Complete purchase journey from login to logout
 - Cart item verification
 - Checkout form submission
 - Order confirmation
 - Session logout verification
+
+### E2E Negative Flow (e2enegative.cy.js)
+- Checkout form negative case testing
+- Session logout verification
+- Verifies automatic redirection to login page when trying to access page that can only be viewed after logging in.

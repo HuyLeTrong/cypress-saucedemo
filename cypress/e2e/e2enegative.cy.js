@@ -1,12 +1,15 @@
 describe('Saucedemo E2E negative flow', () => {
+
+    beforeEach(() => {
+    cy.clearCookies()
+    cy.clearLocalStorage()
+    })
   
     it('saucedemo-negative-flow', () => {
 
         cy.visit('/')
         //login
-        cy.get('[data-test="username"]').type('standard_user')
-        cy.get('[data-test="password"]').type('secret_sauce')
-        cy.get('[data-test="login-button"]').click()
+        cy.login(Cypress.env('username'), Cypress.env('password'))
 
         cy.url().should('eq', Cypress.config().baseUrl + '/inventory.html')
         cy.get('[data-test="add-to-cart-sauce-labs-backpack"]', { timeout: 10000 }).click()

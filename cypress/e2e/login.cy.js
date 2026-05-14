@@ -1,5 +1,8 @@
 describe('Saucedemo Login', () => {
+ 
     beforeEach(() => {
+        cy.clearCookies()
+        cy.clearLocalStorage()
         cy.visit('/')
     })
 
@@ -10,52 +13,42 @@ describe('Saucedemo Login', () => {
     })
   
     it('saucedemo-login-test', () => {
-        cy.get('[data-test="username"]').click();
-        cy.get('[data-test="username"]').type('standard_user');
-        cy.get('[data-test="password"]').click();
-        cy.get('[data-test="password"]').type('secret_sauce');
-        cy.get('[data-test="login-button"]').click();
+        cy.login(Cypress.env('username'), Cypress.env('password'))
         cy.url().should('eq', Cypress.config().baseUrl + '/inventory.html')
     })
 
     it('saucedemo-empty-username', () => {
-        cy.get('[data-test="password"]').type('secret_sauce');
-        cy.get('[data-test="login-button"]').click();
+        cy.get('[data-test="password"]').type(Cypress.env('password'))
+        cy.get('[data-test="login-button"]').click()
         cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Username is required')
     })
 
     it('saucedemo-empty-password', () => {
-        cy.get('[data-test="username"]').type('standard_user');
-        cy.get('[data-test="login-button"]').click();
+        cy.get('[data-test="username"]').type(Cypress.env('username'))
+        cy.get('[data-test="login-button"]').click()
         cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Password is required')
     })
 
     it('saucedemo-invalid-username', () => {
-        cy.get('[data-test="username"]').type('invalid_user');
-        cy.get('[data-test="password"]').type('secret_sauce');
-        cy.get('[data-test="login-button"]').click();
+        cy.login('invalid_user', Cypress.env('password'))
         cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Username and password do not match any user in this service')
     })
 
     it('saucedemo-invalid-password', () => {
-        cy.get('[data-test="username"]').type('standard_user');
-        cy.get('[data-test="password"]').type('invalid_password');
-        cy.get('[data-test="login-button"]').click();
+        cy.login(Cypress.env('username'), 'invalid_password')
         cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Username and password do not match any user in this service')
     })
 
     it('saucedemo-locked-out-user', () => {
-        cy.get('[data-test="username"]').type('locked_out_user');
-        cy.get('[data-test="password"]').type('secret_sauce');
-        cy.get('[data-test="login-button"]').click();
+        cy.login('locked_out_user', Cypress.env('password'))
         cy.get('[data-test="error"]').should('have.text', 'Epic sadface: Sorry, this user has been locked out.')
     })
 
     it('saucedemo-performance-glitch-user', () => {
-        const startTime = Date.now()
-        cy.get('[data-test="username"]').type('performance_glitch_user');
-        cy.get('[data-test="password"]').type('secret_sauce');
-        cy.get('[data-test="login-button"]').click();
+        let startTime
+        cy.visit('/')
+            .then(() => { startTime = Date.now() }) 
+        cy.login('performance_glitch_user', Cypress.env('password'))
         cy.url().should('eq', Cypress.config().baseUrl + '/inventory.html').then(() => {
             const duration = Date.now() - startTime
             cy.log(`Glitch user login: ${duration}ms`)
@@ -67,11 +60,7 @@ describe('Saucedemo Login', () => {
 
     it('saucedemo-verify-specific-item-details', () => {
     const src1 = '/static/media/sauce-backpack-1200x1500.0a0b85a385945026062b.jpg';
-    cy.get('[data-test="username"]').click();
-    cy.get('[data-test="username"]').type('visual_user');
-    cy.get('[data-test="password"]').click();
-    cy.get('[data-test="password"]').type('secret_sauce');
-    cy.get('[data-test="login-button"]').click();
+    cy.login('visual_user', Cypress.env('password'));
     cy.contains('.inventory_item', 'Sauce Labs Backpack')
         .within(() => {
             // Check name
