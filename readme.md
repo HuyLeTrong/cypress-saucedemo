@@ -15,8 +15,8 @@ For this test project cypress.env.json is intentionally committed for demo purpo
 npm install
 
 ### Running Tests
-npm run cypress:run       # headless
-npm run cypress:open      # interactive UI
+- Open CMD on the cypress project folder
+- run npx cypress open
 
 ## Test Scenarios Covered
 
