@@ -1,9 +1,10 @@
 [![Cypress E2E Tests](https://github.com/HuyLeTrong/cypress-saucedemo/actions/workflows/saucedemo-cypress.yaml/badge.svg)](https://github.com/HuyLeTrong/cypress-saucedemo/actions/workflows/saucedemo-cypress.yaml)
 
 ### SauceDemo Cypress testing
+SauceDemo is a deliberately buggy demo e-commerce site by Sauce Labs, designed for testing practice — it includes users with built-in defects like session locking, performance degradation, and visual bugs, making it ideal for demonstrating different types of test scenarios.
 
 This is a sample project for automated E2E testing of the SauceDemo website using Cypress
-For this test project cypress.env.json is intentionally committed for demo purposes only. In a production project this file should be listed in .gitignore.
+For this test project cypress.env.json is intentionally committed for demo purposes only. The file contains working credentials and can be used directly to run the tests. In a production project, this file should be listed in .gitignore in order to keep login credentials private. 
 
 ## Getting Started
 
@@ -15,8 +16,9 @@ For this test project cypress.env.json is intentionally committed for demo purpo
 npm install
 
 ### Running Tests
-- Open CMD on the cypress project folder
-- run npx cypress open
+- Navigate to the project root in your terminal
+- run npx cypress open for UI mode
+- run npx cypress run for headless mode
 
 ## Test Scenarios Covered
 
